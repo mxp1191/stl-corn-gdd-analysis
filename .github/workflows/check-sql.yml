@@ -1,0 +1,22 @@
+name: Check SQL file
+
+on: [push]
+
+jobs:
+  check-sql:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Confirm SQL file exists and is not empty
+        run: |
+          if [ ! -s corn_gdd_query.sql ]; then
+            echo "SQL file is missing or empty!"
+            exit 1
+          fi
+          echo "SQL file found and contains content."
+
+      - name: Check for basic SQL keywords
+        run: |
+          grep -q "SELECT" corn_gdd_query.sql && echo "Contains SELECT statement — looks like valid SQL structure."
